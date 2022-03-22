@@ -89,8 +89,8 @@ def predict(model, input_df):
     model = best[model_index]
     pred = predict_model(model, df, raw_score=True)
     predictions = predictions_df['Label'][0]
-    return {'Dead': pred['Score_Not_Survived'][0].astype('float64'), 
-            'Survived': pred['Score_Survived'][0].astype('float64'),
+    return {'Dead': predict['Score_Not_Survived'][0].astype('float64'), 
+            'Survived': predict['Score_Survived'][0].astype('float64'),
             }
    # return predictions
 
