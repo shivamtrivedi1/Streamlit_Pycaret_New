@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
+
 
 
 import numpy as np 
@@ -18,77 +18,14 @@ import streamlit as st
 import pycaret
 
 
-# In[3]:
 
 
 train = pd.read_csv('train.csv')
 test = pd.read_csv('test.csv')
 sub = pd.read_csv('gender_submission.csv')
 
-
-# In[4]:
-
-
-train.head()
-
-
-# In[7]:
-
-
 train["Survived"]=train["Survived"].apply(lambda x:"Survived" if x==1 else "Dead")
 
-
-# In[8]:
-
-
-test.head()
-
-
-# In[9]:
-
-
-train
-
-
-# In[28]:
-
-
-train["Embarked"].unique()
-
-
-# In[5]:
-
-
-train.info()
-
-
-# In[6]:
-
-
-def cat_summary(dataframe, col_name, plot=False):
-
-    print(pd.DataFrame({col_name: dataframe[col_name].value_counts(),
-                        "Ratio": 100 * dataframe[col_name].value_counts() / len(dataframe)}))
-    print("##########################################")
-
-    if plot:
-        sns.countplot(x=dataframe[col_name], data=dataframe)
-        plt.show()
-
-
-# In[7]:
-
-
-cat_summary(train, "Survived", plot=True)
-
-
-# In[8]:
-
-
-from pycaret.classification import *
-
-
-# In[9]:
 
 
 clf1 = setup(data = train, 
@@ -102,88 +39,48 @@ clf1 = setup(data = train,
              )
 
 
-# In[10]:
-
-
-compare_models()
-
-
-# In[11]:
 
 
 g_boost  = create_model('gbc') 
 
 
-# In[12]:
+
 
 
 tuned_gb = tune_model(g_boost)
 
 
-# In[ ]:
+
 
 
 best = compare_models(n_select = 15)
 compare_model_results = pull()
 
 
-# In[13]:
 
 
-plot_model(estimator = tuned_gb, plot = 'learning')
-
-
-# In[14]:
-
-
-plot_model(estimator = tuned_gb, plot = 'auc')
-
-
-# In[15]:
-
-
-evaluate_model(tuned_gb)
-
-
-# In[16]:
 
 
 predictions=predict_model(tuned_gb,train)
-predictions
 
 
-# In[17]:
+
+
 
 
 test_predictions=predict_model(tuned_gb,test)
-test_predictions
 
 
-# In[29]:
+
+
 
 
 save_model(g_boost , 'deployment_28042021')
 
 
-# In[31]:
-
-
-deployment_28042021 = load_model('deployment_28042021')
-
-
-# In[20]:
-
-
-deployment_28042020
-
-
-# In[ ]:
 
 
 
-
-
-# In[ ]:
 
 
 def predict(model, input_df):
