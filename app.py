@@ -5,7 +5,7 @@
 
 
 import numpy as np 
-
+from pycaret.classification import *
 # data processing
 import pandas as pd 
 
